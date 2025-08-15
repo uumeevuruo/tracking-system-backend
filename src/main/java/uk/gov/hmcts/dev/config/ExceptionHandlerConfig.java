@@ -19,7 +19,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionHandlerConfig {
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ResponseData<ResponseError<String>>> handleEntityNotFoundExceptionHandler(EntityNotFoundException e){
         return ResponseHandler.generateResponse(
@@ -31,7 +30,6 @@ public class ExceptionHandlerConfig {
         );
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateException.class)
     public ResponseEntity<ResponseData<ResponseError<Map<String, String>>>> handleDuplicateExceptionHandler(DuplicateException e){
         return ResponseHandler.generateResponse(
@@ -43,7 +41,6 @@ public class ExceptionHandlerConfig {
         );
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CaseException.class)
     public ResponseEntity<ResponseData<ResponseError<String>>> handleEntityNotFoundExceptionHandler(CaseException e){
         return ResponseHandler.generateResponse(
@@ -70,6 +67,17 @@ public class ExceptionHandlerConfig {
                 HttpStatus.BAD_REQUEST,
                 ResponseError.<Map<String, String>>builder()
                         .errors(errors)
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ResponseData<ResponseError<String>>> handleUnexpectedException(Exception e){
+        return ResponseHandler.generateResponse(
+                "There was an issue with your case",
+                HttpStatus.BAD_REQUEST,
+                ResponseError.<String>builder()
+                        .error("An unexpected error occurred")
                         .build()
         );
     }

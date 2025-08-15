@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dev.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,6 +26,7 @@ public class CaseService {
     private final CaseRepository caseRepository;
     private final CaseMapper mapper;
 
+    @Transactional
     public TaskResponseData createCase(CaseRequest request){
 
         if(isNull(request.status())) {
@@ -70,6 +72,7 @@ public class CaseService {
                 .build();
     }
 
+    @Transactional
     public TaskResponseData updateCase(CaseRequest request){
         var response = caseRepository.findById(request.id())
                 .orElseThrow(() -> new EntityNotFoundException("Case not found"));
@@ -95,6 +98,7 @@ public class CaseService {
                 .build();
     }
 
+    @Transactional
     public void deleteCase(UUID id){
         var response = caseRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Case not found"));
